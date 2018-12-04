@@ -31,4 +31,6 @@ public interface ClientHelper {
 	String convertToFormattedData(Object object);
 
 	Object convertToOpenMrsObject(Object object, String category) throws NotSupportedException;
+
+	String extractUUIDFromRestResource(String link);
 }

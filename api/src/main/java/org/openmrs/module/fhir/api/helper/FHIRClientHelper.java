@@ -18,6 +18,7 @@ import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.openmrs.module.fhir.api.client.BasicAuthInterceptor;
 import org.openmrs.module.fhir.api.client.FHIRHttpMessageConverter;
 import org.openmrs.module.fhir.api.client.HeaderClientHttpRequestInterceptor;
+import org.openmrs.module.fhir.api.constants.ClientHelperConstants;
 import org.openmrs.module.fhir.api.util.ErrorUtil;
 import org.openmrs.module.fhir.api.util.FHIRAllergyIntoleranceUtil;
 import org.openmrs.module.fhir.api.util.FHIREncounterUtil;
@@ -36,6 +37,7 @@ import org.springframework.http.RequestEntity;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.stereotype.Component;
 
 import javax.transaction.NotSupportedException;
 import java.net.URI;
@@ -59,6 +61,7 @@ import static org.openmrs.module.fhir.api.util.FHIRConstants.CATEGORY_PROVIDER;
 import static org.openmrs.module.fhir.api.util.FHIRConstants.CATEGORY_TEST_ORDER;
 import static org.openmrs.module.fhir.api.util.FHIRConstants.CATEGORY_VISIT;
 
+@Component(ClientHelperConstants.CLIENT_HELPER_COMPONENT_PREFIX + ClientHelperConstants.FHIR_CLIENT)
 public class FHIRClientHelper implements ClientHelper {
 
 	private static final Map<String, Class> CATEGORY_MAP;
@@ -220,6 +223,12 @@ public class FHIRClientHelper implements ClientHelper {
 		}
 		ErrorUtil.checkErrors(errors);
 		return result;
+	}
+
+	@Override
+	public String extractUUIDFromRestResource(String link) {
+		String[] tokens = link.split("/");
+		return tokens[4];
 	}
 
 	private String createUrl(String url, IBaseResource object) {
